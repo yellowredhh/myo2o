@@ -19,6 +19,7 @@
 			<scope>test</scope>
 		</dependency>
 
+
 		<!-- 1.日志 -->
 		<!-- 实现slf4j接口并整合 -->
 		<dependency>
