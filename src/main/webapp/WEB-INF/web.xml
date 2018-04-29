@@ -7,5 +7,23 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 	
+	<!-- 配置DispatcherServlet -->
+	<servlet>
+		<servlet-name>seckill-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 配置springMVC需要加载的配置文件 spring-dao.xml,spring-service.xml,spring-web.xml 
+			Mybatis - > spring -> springmvc -->
+		<init-param>
+		<!-- 这个配置指定了系统去哪里加载spring-mvc的配置文件,并且这种通配符的写法相当于把所有符合格式的配置文件整合到了一起,
+		所以在spring-service.xml文件中可以直接使用datasource -->
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/spring-*.xml</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>seckill-dispatcher</servlet-name>
+		<!-- 默认匹配所有的请求 -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 	
 </web-app>
