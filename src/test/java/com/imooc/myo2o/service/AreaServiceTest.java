@@ -1,5 +1,4 @@
-package com.imooc.myo2o.dao;
-
+package com.imooc.myo2o.service;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.imooc.myo2o.BaseTest;
 import com.imooc.myo2o.entity.Area;
 
-public class AreaDaoTest extends BaseTest {
+public class AreaServiceTest extends BaseTest{
 	
 	@Autowired
-	private AreaDao areadao;
+	private AreaService areaService;
 	
 	@Test
-	public void queryAreaDao(){
-		List<Area> arealist = areadao.queryArea();
-		assertEquals(4,arealist.size());
-		System.out.println(arealist);
+	public void getAreaListTest(){
+		List<Area> areaList = areaService.getAreaList();
+		assertEquals("东苑",areaList.get(0).getAreaName());
 	}
+
 }

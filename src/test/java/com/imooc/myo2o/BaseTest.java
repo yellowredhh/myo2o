@@ -10,8 +10,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 //告诉junit spring的配置文件在哪里
-@ContextConfiguration({ "classpath:spring/spring-*.xml" })
-@WebAppConfiguration("src/main/resources")
+@ContextConfiguration({ "classpath:spring/spring-dao.xml","classpath:spring/spring-service.xml" })
+//不加这个注解,报Failed to load ApplicationContext错误
+//@WebAppConfiguration("src/main/resources")
 public class BaseTest {
 
 }
