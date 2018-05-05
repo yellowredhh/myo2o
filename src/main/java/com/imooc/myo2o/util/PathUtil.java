@@ -25,6 +25,7 @@ public class PathUtil {
 	 * 获取商铺图片的相对路径(这个路径和basePath一起组成了全路径)
 	 */
 	public static String getShopImagePath(Long shopId) {
+		//其实当我这个相对路径和上面方法中的绝对路径进行组合的时候会多出来一个"/"符号,但是现在没有报错了.通过日志可以看到自动去掉了重复的"/".
 		String shopImagePath = "/upload/images/item/shop/" + shopId + "/";
 		return shopImagePath.replace("/", separator);
 	}

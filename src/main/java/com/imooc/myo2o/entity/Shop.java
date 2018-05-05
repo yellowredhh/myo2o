@@ -2,6 +2,7 @@ package com.imooc.myo2o.entity;
 
 import java.util.Date;
 import java.util.List;
+
 /*
  * 店铺
  */

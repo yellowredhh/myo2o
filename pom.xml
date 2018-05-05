@@ -9,6 +9,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<spring.version>4.3.7.RELEASE</spring.version>
+		<jackson.version>2.9.5</jackson.version>
 	</properties>
 	<dependencies>
 		<!-- 单元测试 -->
@@ -74,7 +75,7 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		
+
 		<!-- 4.Spring -->
 		<!-- 1)Spring核心 -->
 		<dependency>
@@ -120,7 +121,7 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<!-- 实现图片水印的包 -->
 		<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
 		<dependency>
@@ -128,8 +129,16 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.8</version>
 		</dependency>
+
+		<!-- POJOs to JSON and back-->
+		<!-- https://github.com/FasterXML/jackson-databind -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>myo2o</finalName>
 		<plugins>
