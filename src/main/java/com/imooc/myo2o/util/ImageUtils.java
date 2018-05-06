@@ -2,6 +2,7 @@ package com.imooc.myo2o.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -28,9 +29,9 @@ public class ImageUtils {
 	 * 传入一个图片,创建其缩略图,缩略图规格是200*200,并加上水印透明度是35%,图片输出质量是0.8,并将图片输出到传入的targetAddr目录下.
 	 *@return 新文件的相对路径
 	 */
-	public static String generateThumbnail(File cMFile, String targetAddr) {
+	public static String generateThumbnail(InputStream fileInputStream, String targetAddr,String fileName) {
 		String randomFileName = getRandomFileName();
-		String extension = getFileExtension(cMFile);
+		String extension = getFileExtension(fileName);
 		mkdir(targetAddr);
 		//把文件改名之后的相对路径,包含了文件名和文件后缀名
 		String relativePath = targetAddr + randomFileName + extension;
@@ -39,7 +40,7 @@ public class ImageUtils {
 		File dest = new File(PathUtil.getImgBasePath() + relativePath);
 		logger.debug("current completePath:" + dest);
 		try {
-			Thumbnails.of(cMFile).size(300, 300)
+			Thumbnails.of(fileInputStream).size(300, 300)
 					.watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath + "/coding.jpg")), 0.35f)
 					.outputQuality(0.8f).toFile(dest);
 		} catch (IOException e) {
@@ -64,9 +65,9 @@ public class ImageUtils {
 	/*
 	 * 获取传入文件的后缀名
 	 */
-	private static String getFileExtension(File cMFile) {
+	private static String getFileExtension(String fileName) {
 		//CommonsMutiFile没有重写toString 方法.但File重写了
-		String extension = cMFile.toString().substring(cMFile.toString().lastIndexOf("."));
+		String extension = fileName.substring(fileName.lastIndexOf("."));
 		//String extension = cMFile.getOriginalFilename().substring(cMFile.getOriginalFilename().lastIndexOf("."));
 		return extension;
 	}

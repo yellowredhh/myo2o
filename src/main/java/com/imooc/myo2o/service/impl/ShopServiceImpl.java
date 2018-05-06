@@ -1,6 +1,7 @@
 package com.imooc.myo2o.service.impl;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ShopServiceImpl implements ShopService {
 	 * @see com.imooc.myo2o.service.ShopService#addShop(com.imooc.myo2o.entity.Shop, java.io.File)
 	 * @return 	ShopExecution是service层的处理结果,里面包含了处理状态和shop等信息
 	 */
-	public ShopExecution addShop(Shop shop, File shopImg) {
+	public ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName) {
 		if (shop == null) {
 			//throw new ShopExecutionException(ShopStateEnums.NULL_SHOP_INFO.getStateInfo());
 			return new ShopExecution(ShopStateEnums.NULL_SHOP_INFO);
@@ -44,7 +45,7 @@ public class ShopServiceImpl implements ShopService {
 				if (effectNumber <= 0) {
 					throw new ShopExecutionException("添加店铺信息失败");
 				} else {
-					if (shopImg != null) {
+					if (shopImgInputStream != null) {
 						try {
 							/*
 							 * 在这里更改了shop对象的属性,由于java对于形参不论是基本数据类型还是对象类型都是采用的值传递
@@ -52,7 +53,7 @@ public class ShopServiceImpl implements ShopService {
 							 *对象类型:传递的是该对象所指向的堆对象的指针的拷贝,也就是两者会指向同一个堆对象,所以这里改变了shop的属性,在方法外面的shop属性也会改变.
 							 */
 							//给shop实例添加店铺图片的相对路径属性
-							addShopImg(shop, shopImg);
+							addShopImg(shop, shopImgInputStream, fileName);
 						} catch (Exception e) {
 							throw new ShopExecutionException("添加店铺缩略图失败:" + e.getMessage());
 						}
@@ -71,11 +72,11 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	//首先通过shopId获取到商铺的
-	private void addShopImg(Shop shop, File shopImg) {
+	private void addShopImg(Shop shop, InputStream shopImgInputStream, String fileName) {
 		//通过shopId来获取商铺的图片的相对路径(这个方法里面有一个硬编码加入了相对路径)
 		String shopImagePath = PathUtil.getShopImagePath(shop.getShopId());
 		//生成缩略图,并生成新的商品缩略图相对路径
-		String shopImgAddr = ImageUtils.generateThumbnail(shopImg, shopImagePath);
+		String shopImgAddr = ImageUtils.generateThumbnail(shopImgInputStream, shopImagePath, fileName);
 		//更新商品缩略图的相对路径
 		shop.setShopImg(shopImgAddr);
 	}
