@@ -29,7 +29,7 @@ public class ImageUtils {
 	 * 传入一个图片,创建其缩略图,缩略图规格是200*200,并加上水印透明度是35%,图片输出质量是0.8,并将图片输出到传入的targetAddr目录下.
 	 *@return 新文件的相对路径
 	 */
-	public static String generateThumbnail(InputStream fileInputStream, String targetAddr,String fileName) {
+	public static String generateThumbnail(InputStream fileInputStream, String targetAddr, String fileName) {
 		String randomFileName = getRandomFileName();
 		String extension = getFileExtension(fileName);
 		mkdir(targetAddr);
@@ -79,6 +79,23 @@ public class ImageUtils {
 		String randomFile = simpleDateFormat.format(new Date());
 		int random = randomint.nextInt(89999) + 10000;
 		return randomFile + random;
+	}
+	
+	/*
+	 * 传入一个相对路径的字符串,如果这个storePath是文件,则直接删除
+	 * 如果storePath是目录,则先删除该目录下的全部文件.然后删除目录.
+	 */
+	public static void deleteFileOrPath(String storePath) {
+		File fileOrPath = new File(PathUtil.getImgBasePath() + storePath);
+		if (fileOrPath.exists()) {
+			if (fileOrPath.isDirectory()) {
+				File[] files = fileOrPath.listFiles();
+				for (File file : files) {
+					file.delete();
+				}
+			}
+			fileOrPath.delete();
+		}
 	}
 
 	/*

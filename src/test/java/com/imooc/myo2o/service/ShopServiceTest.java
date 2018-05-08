@@ -20,6 +20,14 @@ public class ShopServiceTest extends BaseTest {
 	private ShopService shopService;
 
 	@Test
+	public void getShopByIdTest(){
+		Long shopId = 49L;
+		Shop shop = shopService.queryShopByShopId(shopId);
+		System.out.println(shop);
+	}
+	
+	
+	@Test
 	public void addShopTest() throws FileNotFoundException {
 		Shop shop = new Shop();
 		shop.setOwnerId(9L);
@@ -30,5 +38,18 @@ public class ShopServiceTest extends BaseTest {
 		//记得把shopImg文件放到src/test/resources/目录下,因为这个程序是在/src/test/java/目录下面运行的.否则报Can't read input file!
 		ShopExecution shopExecution = shopService.addShop(shop, shopImgInputStream, fileName);
 		assertEquals(0, shopExecution.getState());
+	}
+	
+	@Test
+	public void modifyShopTest() throws FileNotFoundException{
+		Shop shop = new Shop();
+		shop.setShopId(48L);
+		shop.setOwnerId(9L);
+		shop.setShopName("addShopTest666");
+		File shopImg = new File("C:/Users/hh/Pictures/FLAMING MOUNTAIN.JPG");
+		InputStream shopImgInputStream = new FileInputStream(shopImg);
+		String fileName = shopImg.getName();
+		ShopExecution shopExecution = shopService.modifyShop(shop, shopImgInputStream, fileName);
+		System.out.println(shopExecution.getStateInfo());
 	}
 }

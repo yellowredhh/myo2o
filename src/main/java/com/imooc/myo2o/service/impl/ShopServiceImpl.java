@@ -80,4 +80,47 @@ public class ShopServiceImpl implements ShopService {
 		//更新商品缩略图的相对路径
 		shop.setShopImg(shopImgAddr);
 	}
+
+	@Override
+	public Shop queryShopByShopId(Long shopId) {
+		Shop shop = shopDao.queryShopByShopId(shopId);
+		return shop;
+	}
+
+	/*
+	 * 对商铺信息进行更新操作
+	 */
+	@Override
+	public ShopExecution modifyShop(Shop shop, InputStream shopImgInputStream, String fileName)
+			throws ShopExecutionException {
+		if (shop == null || fileName == null || " ".equals(fileName)) {
+			return new ShopExecution(ShopStateEnums.NULL_SHOP_INFO);
+		} else {
+			try {
+
+				//1.判断是否要对商铺的图片进行修改(这里采用的策略是如果要对图片进行更改就删除原来的图片,其实可以不用删除,直接添加新图片,在数据库中会记录新的图片地址.原来的图片还可以留在服务器中,方便以后添加功能.比如历史头像等)
+				if (shopImgInputStream != null && fileName != null && !" ".equals(fileName)) {
+					//这里创建一个tempShop的好处是.如果直接拿传入的shop参数去获取原图片地址信息,用户可能对图片地址做了改动,比如用户不想要图片了,设置成了空的
+					Shop tempShop = shopDao.queryShopByShopId(shop.getShopId());
+					//根据传入的shop拿到原shop的图片地址,进行删除图片操作
+					if (tempShop.getShopImg() != null) {
+						ImageUtils.deleteFileOrPath(tempShop.getShopImg());
+					}
+					addShopImg(shop, shopImgInputStream, fileName);
+				}
+				//2.更新商铺信息
+				shop.setLastEditTime(new Date());
+				int effectNumber = shopDao.updateShop(shop);
+				if (effectNumber <= 0) {
+					return new ShopExecution(ShopStateEnums.INNER_ERROR);
+				} else {
+					//拿到更新过后的shop.
+					shop = shopDao.queryShopByShopId(shop.getShopId());
+					return new ShopExecution(ShopStateEnums.SUCCESS, shop);
+				}
+			} catch (Exception e) {
+				throw new ShopExecutionException("shopModifyError:" + e.getMessage());
+			}
+		}
+	}
 }

@@ -2,6 +2,8 @@ package com.imooc.myo2o.dao;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,6 +13,22 @@ import com.imooc.myo2o.entity.Shop;
 public class ShopDaoTest extends BaseTest {
 	@Autowired
 	private ShopDao shopdao;
+
+	@Test
+	public void queryShopListTest() {
+		Shop shopCondition = new Shop();
+		shopCondition.setShopId(15L);
+		List<Shop> shopList = shopdao.queryShopList(shopCondition);
+		System.out.println(shopList.size());
+	}
+
+	@Test
+	public void queryShopByShopIdTest() {
+		//数据库中没有这个shopId为1的数据行,查询不报错,给输出了一个null.
+		Long shopId = 49l;
+		Shop shop = shopdao.queryShopByShopId(shopId);
+		System.out.println(shop);
+	}
 
 	@Test
 	public void insertShopTest() {
@@ -36,7 +54,7 @@ public class ShopDaoTest extends BaseTest {
 		Shop shop = new Shop();
 		shop.setShopId(30L);
 		int effectNumber = shopdao.deleteShop(shop);
-		assertEquals(1,effectNumber);
+		assertEquals(1, effectNumber);
 	}
 
 }
