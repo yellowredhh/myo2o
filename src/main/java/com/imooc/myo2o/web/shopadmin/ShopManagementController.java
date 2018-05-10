@@ -42,7 +42,7 @@ public class ShopManagementController {
 	@Autowired
 	private ShopCategoryService shopCategoryService;
 
-	@RequestMapping(value = "/getshopbyid")
+	@RequestMapping(value = "/getshopbyid", method = RequestMethod.GET)
 	@ResponseBody
 	private Map<String, Object> getShopById(HttpServletRequest request) {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -65,7 +65,7 @@ public class ShopManagementController {
 		return modelMap;
 	}
 
-	@RequestMapping("/getshopinitinfo")
+	@RequestMapping(value = "/getshopinitinfo", method = RequestMethod.GET)
 	@ResponseBody
 	private Map<String, Object> getShopInitInfo() {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -82,7 +82,7 @@ public class ShopManagementController {
 		return modelMap;
 	}
 
-	@RequestMapping("/registershop")
+	@RequestMapping(value = "/registershop", method = RequestMethod.POST)
 	@ResponseBody
 	private Map<String, Object> registerShop(HttpServletRequest request) {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -178,7 +178,7 @@ public class ShopManagementController {
 	/*
 	 * 修改店铺信息
 	 */
-	@RequestMapping("/modifyshop")
+	@RequestMapping(value = "/modifyshop", method = RequestMethod.POST)
 	@ResponseBody
 	private Map<String, Object> modifyShop(HttpServletRequest request) {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -237,6 +237,54 @@ public class ShopManagementController {
 			modelMap.put("errMsg", "请输入店铺ID");
 			return modelMap;
 		}
+	}
+
+	@RequestMapping(value = "/getshopmanagementinfo", method = RequestMethod.GET)
+	@ResponseBody
+	private Map<String, Object> getShopManagementInfo(HttpServletRequest request) {
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		Long shopId = HttpServletRequestUtil.getLong(request, "shopId");
+		if (shopId <= 0) {
+			Object currentShopObj = request.getSession().getAttribute("currentShop");
+			if (currentShopObj == null) {
+				modelMap.put("redirect", true);
+				//本来url的value应该是'myo2o/shopadmin/shoplist'才对,但是不知道为什么重定向的url都会自动携带原url的父目录,导致最后地址变为'myo2o/shopadmin/myo2o/shopadmin/shoplist'
+				modelMap.put("url", "shoplist");
+			} else {
+				Shop currentShop = (Shop) currentShopObj;
+				modelMap.put("redirect", false);
+				modelMap.put("shopId", currentShop.getShopId());
+			}
+		} else {
+			Shop currentShop = new Shop();
+			currentShop.setShopId(shopId);
+			request.getSession().setAttribute("currentShop", currentShop);
+			modelMap.put("redirect", false);
+		}
+		return modelMap;
+	}
+
+	@RequestMapping(value = "/getshoplist", method = RequestMethod.GET)
+	@ResponseBody
+	private Map<String, Object> getShopList(HttpServletRequest request) {
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		//先硬编码一个数据到session中去.
+		request.getSession().setAttribute("areaId", 4L);
+		Long areaId = (Long) request.getSession().getAttribute("areaId");
+		try {
+			Shop shopCondition = new Shop();
+			Area area = new Area();
+			area.setAreaId(areaId);
+			shopCondition.setArea(area);
+			ShopExecution se = shopService.getShopList(shopCondition, 0, 100);
+			modelMap.put("shopList", se.getShopList());
+			modelMap.put("success", true);
+			modelMap.put("areaId", areaId);
+		} catch (Exception e) {
+			modelMap.put("success", false);
+			modelMap.put("errMsg", e.getMessage());
+		}
+		return modelMap;
 	}
 
 	//后来发现thumbnails的of方法可以接受一个InputStream参数,所以对代码做了比较大的改动,不需要这个转换方法了

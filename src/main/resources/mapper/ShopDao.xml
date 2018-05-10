@@ -62,6 +62,7 @@
 		</collection>
 	</resultMap>
 
+	<!-- 这个查询要传入三个参数,所以没有parameterType元素,用户可以根据传入的参数做高级查询,分页查询 -->
 	<select id="queryShopList" resultMap="shopMap"
 		parameterType="com.imooc.myo2o.entity.Shop">
 		SELECT
@@ -82,8 +83,6 @@
 		last_edit_time,
 		enable_status,
 		advice
-		<!-- FROM tb_shop s, tb_area a, tb_shop_category sc where s.area_id = a.area_id 
-			and s.shop_category_id = sc.shop_category_id and shop_id = #{shopId} -->
 		FROM
 		tb_shop
 		<where>
@@ -122,6 +121,44 @@
 		LIMIT #{rowIndex},#{pageSize};
 	</select>
 
+	<!-- 查询符合条件的商铺的总数量,用于分页查询 -->
+	<select id="queryShopCount" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		tb_shop
+		<where>
+			<if test="shopCondition.shopId!=null">
+				and shop_id = #{shopCondition.shopId}
+			</if>
+			<if
+				test="shopCondition.shopCategory!=null
+				 and shopCondition.shopCategory.shopCategoryId!=null">
+				and shop_category_id =
+				#{shopCondition.shopCategory.shopCategoryId}
+			</if>
+			<if
+				test="shopCondition.parentCategory!=null
+				 and shopCondition.parentCategory.shopCategoryId!=null">
+				and parent_category_id =
+				#{shopCondition.parentCategory.shopCategoryId}
+			</if>
+			<if
+				test="shopCondition.area!=null
+				 and shopCondition.area.areaId!=null">
+				and area_id =
+				#{shopCondition.area.areaId}
+			</if>
+			<!-- 写like语句的时候 一般都会写成 like '% %' 在mybatis里面写就是应该是 like '%${name} %' 而不是 
+				'%#{name} %' ${name} 是不带单引号的，而#{name} 是带单引号的 -->
+			<if test="shopCondition.shopName!=null">
+				and shop_name like '%${shopCondition.shopName}%'
+			</if>
+			<if test="shopCondition.enableStatus!=null">
+				and enable_status = #{shopCondition.enableStatus}
+			</if>
+		</where>
+	</select>
 
 	<select id="queryShopByShopId" resultMap="shopMap"
 		parameterType="com.imooc.myo2o.entity.Shop">
@@ -144,17 +181,19 @@
 		s.enable_status,
 		s.advice
 		FROM
-		tb_shop	s,
+		tb_shop s,
 		tb_area a,
 		tb_shop_category sc
 		where
 		s.area_id =a.area_id
 		and
-		s.shop_category_id = sc.shop_category_id
+		s.shop_category_id =
+		sc.shop_category_id
 		and shop_id = #{shopId}
+		<!-- 这里有必要联表吗?貌似不需要吧,我们又不去获取tb_area表里面的信息. -->
 	</select>
 
-	<insert id="insertShop" keyColumn="ship_id" keyProperty="shopId"
+	<insert id="insertShop" keyColumn="shop_id" keyProperty="shopId"
 		useGeneratedKeys="true">
 		<!-- 具体的sql -->
 		INSERT INTO

@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.imooc.myo2o.BaseTest;
+import com.imooc.myo2o.entity.Area;
 import com.imooc.myo2o.entity.Shop;
 
 public class ShopDaoTest extends BaseTest {
@@ -15,11 +16,15 @@ public class ShopDaoTest extends BaseTest {
 	private ShopDao shopdao;
 
 	@Test
-	public void queryShopListTest() {
+	public void queryShopListAndCountTest() {
 		Shop shopCondition = new Shop();
-		shopCondition.setShopId(15L);
-		List<Shop> shopList = shopdao.queryShopList(shopCondition);
+		Area area = new Area();
+		area.setAreaId(3L);
+		shopCondition.setArea(area);
+		List<Shop> shopList = shopdao.queryShopList(shopCondition, 0, 3);
+		int count = shopdao.queryShopCount(shopCondition);
 		System.out.println(shopList.size());
+		System.out.println("店铺总数:" + count);
 	}
 
 	@Test

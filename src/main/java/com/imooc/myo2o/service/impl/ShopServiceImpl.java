@@ -1,8 +1,8 @@
 package com.imooc.myo2o.service.impl;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,7 @@ import com.imooc.myo2o.entity.Shop;
 import com.imooc.myo2o.enums.ShopStateEnums;
 import com.imooc.myo2o.service.ShopService;
 import com.imooc.myo2o.util.ImageUtils;
+import com.imooc.myo2o.util.PageCalculator;
 import com.imooc.myo2o.util.PathUtil;
 
 @Service
@@ -91,13 +92,13 @@ public class ShopServiceImpl implements ShopService {
 	 * 对商铺信息进行更新操作
 	 */
 	@Override
+	@Transactional
 	public ShopExecution modifyShop(Shop shop, InputStream shopImgInputStream, String fileName)
 			throws ShopExecutionException {
-		if (shop == null || fileName == null || " ".equals(fileName)) {
+		if (shop == null || shop.getShopId() == null) {
 			return new ShopExecution(ShopStateEnums.NULL_SHOP_INFO);
 		} else {
 			try {
-
 				//1.判断是否要对商铺的图片进行修改(这里采用的策略是如果要对图片进行更改就删除原来的图片,其实可以不用删除,直接添加新图片,在数据库中会记录新的图片地址.原来的图片还可以留在服务器中,方便以后添加功能.比如历史头像等)
 				if (shopImgInputStream != null && fileName != null && !" ".equals(fileName)) {
 					//这里创建一个tempShop的好处是.如果直接拿传入的shop参数去获取原图片地址信息,用户可能对图片地址做了改动,比如用户不想要图片了,设置成了空的
@@ -122,5 +123,20 @@ public class ShopServiceImpl implements ShopService {
 				throw new ShopExecutionException("shopModifyError:" + e.getMessage());
 			}
 		}
+	}
+
+	@Override
+	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize) {
+		int rowIndex = PageCalculator.calculateRowIndex(pageIndex, pageSize);
+		List<Shop> shopList = shopDao.queryShopList(shopCondition, rowIndex, pageSize);
+		int shopCount = shopDao.queryShopCount(shopCondition);
+		ShopExecution se = new ShopExecution();
+		if (shopList != null) {
+			se.setShopList(shopList);
+			se.setCount(shopCount);
+		} else {
+			se.setState(ShopStateEnums.INNER_ERROR.getState());
+		}
+		return se;
 	}
 }

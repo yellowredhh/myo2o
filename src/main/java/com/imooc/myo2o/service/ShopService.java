@@ -6,7 +6,10 @@ import com.imooc.myo2o.dto.ShopExecution;
 import com.imooc.myo2o.entity.Shop;
 
 public interface ShopService {
+
 	
+	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize);
+
 	/*
 	 * 根据店铺id查询店铺信息
 	 */

@@ -2,14 +2,27 @@ package com.imooc.myo2o.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.imooc.myo2o.entity.Shop;
 
 public interface ShopDao {
 
 	/*
-	 * 根据给定的shop信息去查询所有符合这个给定信息的对应的所有的shop
+	 *如果不加上@Param("shopCondition") 会有如下错误 Caused by: org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'shopCondition' in 'class com.imooc.myo2o.entity.Shop'
+	 * 查询商铺的总数.
 	 */
-	public List<Shop> queryShopList(Shop shopCondition);
+	public int queryShopCount(@Param("shopCondition") Shop shopCondition);
+
+	/* 
+	 * 高级查询和枫叶查询:
+	 * 根据给定的shop信息去查询所有符合这个给定信息的对应的所有的shop,在shopCondition中可以添加各种查询条件.
+	 * 后两个参数用于实现分页查询.
+	 * rowIndex表示从第几行开始取数据.
+	 * pageSize一个页面返回的条数.
+	 */
+	public List<Shop> queryShopList(@Param("shopCondition") Shop shopCondition, @Param("rowIndex") int rowIndex,
+			@Param("pageSize") int pageSize);
 
 	/*
 	 * 根据给定的shopId去查询对应的shop消息.

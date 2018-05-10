@@ -19,6 +19,8 @@ public class Product implements Serializable{
 	private Integer priority;
 	private Date createTime;
 	private Date lastEditTime;
+	
+	//0:表示下架,1:表示在前端展示系统展示
 	private Integer enableStatus;
 	private Integer point;
 

@@ -6,12 +6,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.imooc.myo2o.BaseTest;
 import com.imooc.myo2o.dto.ShopExecution;
+import com.imooc.myo2o.entity.Area;
 import com.imooc.myo2o.entity.Shop;
 
 public class ShopServiceTest extends BaseTest {
@@ -20,13 +22,23 @@ public class ShopServiceTest extends BaseTest {
 	private ShopService shopService;
 
 	@Test
-	public void getShopByIdTest(){
+	public void getShopListTest() {
+		Shop shopCondition = new Shop();
+		Area area = new Area();
+		area.setAreaId(4L);
+		shopCondition.setArea(area);
+		ShopExecution se = shopService.getShopList(shopCondition, 0, 2);
+		System.out.println("每页显示的店铺数量:" + se.getShopList().size());
+		System.out.println("符合条件的店铺总数:" + se.getCount());
+	}
+
+	@Test
+	public void getShopByIdTest() {
 		Long shopId = 49L;
 		Shop shop = shopService.queryShopByShopId(shopId);
 		System.out.println(shop);
 	}
-	
-	
+
 	@Test
 	public void addShopTest() throws FileNotFoundException {
 		Shop shop = new Shop();
@@ -39,9 +51,9 @@ public class ShopServiceTest extends BaseTest {
 		ShopExecution shopExecution = shopService.addShop(shop, shopImgInputStream, fileName);
 		assertEquals(0, shopExecution.getState());
 	}
-	
+
 	@Test
-	public void modifyShopTest() throws FileNotFoundException{
+	public void modifyShopTest() throws FileNotFoundException {
 		Shop shop = new Shop();
 		shop.setShopId(48L);
 		shop.setOwnerId(9L);

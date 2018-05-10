@@ -7,12 +7,15 @@ $(function() {
 	var isEdit = shopId ? true : false;
 	var initUrl = '/myo2o/shopadmin/getshopinitinfo';
 	var registerShopUrl = '/myo2o/shopadmin/registershop';
-	var shopInfoUrl = 'myo2o/shopadmin/getshopbyid?shopId=' + shopId;
-	var editShopUrl = 'myo2o/shopadmin/modifyshop';
+	//这里有点迷:下面的两个Url在重定向后为什么会自动加上myo2o/shopadmin前缀?
+	var shopInfoUrl = 'getshopbyid?shopId=' + shopId;
+	var editShopUrl = 'modifyshop';
 	// alert(initUrl);
 	if (!isEdit) {
+		//注册商铺
 		getShopInitInfo();
 	} else {
+		//修改商铺
 		getInfo(shopId);
 	}
 
