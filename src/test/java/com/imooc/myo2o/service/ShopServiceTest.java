@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.imooc.myo2o.BaseTest;
+import com.imooc.myo2o.dto.ImageHolder;
 import com.imooc.myo2o.dto.ShopExecution;
 import com.imooc.myo2o.entity.Area;
 import com.imooc.myo2o.entity.Shop;
@@ -48,7 +49,8 @@ public class ShopServiceTest extends BaseTest {
 		InputStream shopImgInputStream = new FileInputStream(shopImg);
 		String fileName = shopImg.getName();
 		//记得把shopImg文件放到src/test/resources/目录下,因为这个程序是在/src/test/java/目录下面运行的.否则报Can't read input file!
-		ShopExecution shopExecution = shopService.addShop(shop, shopImgInputStream, fileName);
+		ImageHolder imageHolder = new ImageHolder(shopImgInputStream, fileName);
+		ShopExecution shopExecution = shopService.addShop(shop, imageHolder);
 		assertEquals(0, shopExecution.getState());
 	}
 
@@ -61,7 +63,8 @@ public class ShopServiceTest extends BaseTest {
 		File shopImg = new File("C:/Users/hh/Pictures/FLAMING MOUNTAIN.JPG");
 		InputStream shopImgInputStream = new FileInputStream(shopImg);
 		String fileName = shopImg.getName();
-		ShopExecution shopExecution = shopService.modifyShop(shop, shopImgInputStream, fileName);
+		ImageHolder imageHolder = new ImageHolder(shopImgInputStream, fileName);
+		ShopExecution shopExecution = shopService.modifyShop(shop, imageHolder);
 		System.out.println(shopExecution.getStateInfo());
 	}
 }

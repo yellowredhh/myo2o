@@ -51,7 +51,7 @@
 			<result column="product_id" property="productId" />
 		</collection>
 	</resultMap>
-	
+
 	<select id="queryProductList" resultMap="productMap">
 		SELECT
 		product_id,
@@ -119,10 +119,10 @@
 			</if>
 		</where>
 	</select>
-	
+
 	<select id="queryProductByProductId" resultMap="productMap"
 		parameterType="Long">
-		<!-- 具体的sql -->
+		<!-- 具体的sql 左外连接,致使即使product_img表中为空,只要product表不为空,也会被选出来,另外一个product可以对应多个product_img,但是由于定义了resultMap,所以多个product_img会被自动整合到集合当中 -->
 		SELECT
 		p.product_id,
 		p.product_name,
@@ -155,7 +155,7 @@
 		ORDER BY
 		pm.priority DESC
 	</select>
-	
+
 	<insert id="insertProduct" parameterType="com.imooc.myo2o.entity.Product"
 		useGeneratedKeys="true" keyProperty="productId" keyColumn="product_id">
 		INSERT INTO
@@ -169,8 +169,9 @@
 		#{lastEditTime},#{enableStatus},#{point},#{productCategory.productCategoryId},
 		#{shop.shopId})
 	</insert>
+
 	<update id="updateProduct" parameterType="com.imooc.myo2o.entity.Product"
-		keyProperty="product_id" useGeneratedKeys="true">
+		keyProperty="productId" useGeneratedKeys="true">
 		UPDATE tb_product
 		<set>
 			<if test="productName != null">product_name=#{productName},</if>
@@ -191,14 +192,16 @@
 		WHERE product_id = #{productId}
 		AND shop_id=#{shop.shopId}
 	</update>
+
 	<update id="updateProductCategoryToNull" parameterType="Long"
-		keyProperty="product_id" useGeneratedKeys="true">
+		keyProperty="productId" useGeneratedKeys="true">
 		UPDATE tb_product
 		SET
 		product_category_id = null
 		WHERE product_category_id =
 		#{productCategoryId}
 	</update>
+
 	<delete id="deleteProduct">
 		DELETE FROM
 		tb_product

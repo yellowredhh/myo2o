@@ -16,11 +16,17 @@
 		FROM
 		tb_shop_category
 		<where>
+			<if test="shopCategoryCondition==null">
+				<!-- 一级店铺也要选出来 -->
+				and parent_id is null
+			</if>
 			<if test="shopCategoryCondition!=null">
-				<!-- 只选出具有父类店铺种类的店铺,也就是只要二级店铺 -->
+				<!-- 选出具有父类店铺种类的店铺,也就是二级店铺 -->
 				and parent_id is not null
 			</if>
-			<if test="shopCategoryCondition.parentId!=null">
+			<if
+				test="shopCategoryCondition!=null and shopCategoryCondition.parentId!=null">
+				<!-- 避免shopCategoryCondition空指针情况,所以先加一个非空判定 -->
 				and parent_id = #{shopCategoryCondition.parentId}
 			</if>
 		</where>

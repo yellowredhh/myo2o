@@ -2,7 +2,6 @@ package com.imooc.myo2o.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -11,6 +10,8 @@ import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.imooc.myo2o.dto.ImageHolder;
 
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
@@ -23,15 +24,16 @@ public class ImageUtils {
 	private static final Random randomint = new Random();
 
 	/*
+	 * 对商品的缩略图进行处理: 
 	 * CommonsMultpartFile是Spring自带的文件格式.表示要进行处理的图片
 	 * 本来是要用CommonsMultpartFile的,但是做service层的测试的时候不方便传入参数,所以改成了File.
 	 * targetAddr表示创建后的图片放到哪个文件夹
 	 * 传入一个图片,创建其缩略图,缩略图规格是200*200,并加上水印透明度是35%,图片输出质量是0.8,并将图片输出到传入的targetAddr目录下.
 	 *@return 新文件的相对路径
 	 */
-	public static String generateThumbnail(InputStream fileInputStream, String targetAddr, String fileName) {
+	public static String generateThumbnail(ImageHolder imageHolder, String targetAddr) {
 		String randomFileName = getRandomFileName();
-		String extension = getFileExtension(fileName);
+		String extension = getFileExtension(imageHolder.getImageName());
 		mkdir(targetAddr);
 		//把文件改名之后的相对路径,包含了文件名和文件后缀名
 		String relativePath = targetAddr + randomFileName + extension;
@@ -40,9 +42,32 @@ public class ImageUtils {
 		File dest = new File(PathUtil.getImgBasePath() + relativePath);
 		logger.debug("current completePath:" + dest);
 		try {
-			Thumbnails.of(fileInputStream).size(300, 300)
+			Thumbnails.of(imageHolder.getImageInputStream()).size(300, 300)
 					.watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath + "/coding.jpg")), 0.35f)
 					.outputQuality(0.8f).toFile(dest);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return relativePath;
+	}
+
+	/*
+	 * 对商品详情图片进行处理
+	 */
+	public static String generateNormalImg(ImageHolder imageHolder, String targetAddr) {
+		String randomFileName = getRandomFileName();
+		String extension = getFileExtension(imageHolder.getImageName());
+		mkdir(targetAddr);
+		//把文件改名之后的相对路径,包含了文件名和文件后缀名
+		String relativePath = targetAddr + randomFileName + extension;
+		logger.debug("current relativePath:" + relativePath);
+		//全路径
+		File dest = new File(PathUtil.getImgBasePath() + relativePath);
+		logger.debug("current completePath:" + dest);
+		try {
+			Thumbnails.of(imageHolder.getImageInputStream()).size(337, 640)
+					.watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath + "/coding.jpg")), 0.35f)
+					.outputQuality(0.9f).toFile(dest);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -80,7 +105,7 @@ public class ImageUtils {
 		int random = randomint.nextInt(89999) + 10000;
 		return randomFile + random;
 	}
-	
+
 	/*
 	 * 传入一个相对路径的字符串,如果这个storePath是文件,则直接删除
 	 * 如果storePath是目录,则先删除该目录下的全部文件.然后删除目录.

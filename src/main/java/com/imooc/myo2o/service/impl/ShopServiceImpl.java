@@ -1,6 +1,5 @@
 package com.imooc.myo2o.service.impl;
 
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.imooc.myo2o.Exceptions.ShopExecutionException;
 import com.imooc.myo2o.dao.ShopDao;
+import com.imooc.myo2o.dto.ImageHolder;
 import com.imooc.myo2o.dto.ShopExecution;
 import com.imooc.myo2o.entity.Shop;
 import com.imooc.myo2o.enums.ShopStateEnums;
@@ -32,7 +32,7 @@ public class ShopServiceImpl implements ShopService {
 	 * @see com.imooc.myo2o.service.ShopService#addShop(com.imooc.myo2o.entity.Shop, java.io.File)
 	 * @return 	ShopExecution是service层的处理结果,里面包含了处理状态和shop等信息
 	 */
-	public ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName) {
+	public ShopExecution addShop(Shop shop,  ImageHolder imageHolder) {
 		if (shop == null) {
 			//throw new ShopExecutionException(ShopStateEnums.NULL_SHOP_INFO.getStateInfo());
 			return new ShopExecution(ShopStateEnums.NULL_SHOP_INFO);
@@ -46,7 +46,7 @@ public class ShopServiceImpl implements ShopService {
 				if (effectNumber <= 0) {
 					throw new ShopExecutionException("添加店铺信息失败");
 				} else {
-					if (shopImgInputStream != null) {
+					if (imageHolder.getImageInputStream() != null) {
 						try {
 							/*
 							 * 在这里更改了shop对象的属性,由于java对于形参不论是基本数据类型还是对象类型都是采用的值传递
@@ -54,7 +54,7 @@ public class ShopServiceImpl implements ShopService {
 							 *对象类型:传递的是该对象所指向的堆对象的指针的拷贝,也就是两者会指向同一个堆对象,所以这里改变了shop的属性,在方法外面的shop属性也会改变.
 							 */
 							//给shop实例添加店铺图片的相对路径属性
-							addShopImg(shop, shopImgInputStream, fileName);
+							addShopImg(shop, imageHolder);
 						} catch (Exception e) {
 							throw new ShopExecutionException("添加店铺缩略图失败:" + e.getMessage());
 						}
@@ -73,11 +73,11 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	//首先通过shopId获取到商铺的
-	private void addShopImg(Shop shop, InputStream shopImgInputStream, String fileName) {
+	private void addShopImg(Shop shop, ImageHolder imageHolder) {
 		//通过shopId来获取商铺的图片的相对路径(这个方法里面有一个硬编码加入了相对路径)
 		String shopImagePath = PathUtil.getShopImagePath(shop.getShopId());
 		//生成缩略图,并生成新的商品缩略图相对路径
-		String shopImgAddr = ImageUtils.generateThumbnail(shopImgInputStream, shopImagePath, fileName);
+		String shopImgAddr = ImageUtils.generateThumbnail(imageHolder, shopImagePath);
 		//更新商品缩略图的相对路径
 		shop.setShopImg(shopImgAddr);
 	}
@@ -93,21 +93,21 @@ public class ShopServiceImpl implements ShopService {
 	 */
 	@Override
 	@Transactional
-	public ShopExecution modifyShop(Shop shop, InputStream shopImgInputStream, String fileName)
-			throws ShopExecutionException {
+	public ShopExecution modifyShop(Shop shop, ImageHolder imageHolder) throws ShopExecutionException {
 		if (shop == null || shop.getShopId() == null) {
 			return new ShopExecution(ShopStateEnums.NULL_SHOP_INFO);
 		} else {
 			try {
 				//1.判断是否要对商铺的图片进行修改(这里采用的策略是如果要对图片进行更改就删除原来的图片,其实可以不用删除,直接添加新图片,在数据库中会记录新的图片地址.原来的图片还可以留在服务器中,方便以后添加功能.比如历史头像等)
-				if (shopImgInputStream != null && fileName != null && !" ".equals(fileName)) {
+				if (imageHolder.getImageInputStream() != null && imageHolder.getImageName() != null
+						&& !" ".equals(imageHolder.getImageName())) {
 					//这里创建一个tempShop的好处是.如果直接拿传入的shop参数去获取原图片地址信息,用户可能对图片地址做了改动,比如用户不想要图片了,设置成了空的
 					Shop tempShop = shopDao.queryShopByShopId(shop.getShopId());
 					//根据传入的shop拿到原shop的图片地址,进行删除图片操作
 					if (tempShop.getShopImg() != null) {
 						ImageUtils.deleteFileOrPath(tempShop.getShopImg());
 					}
-					addShopImg(shop, shopImgInputStream, fileName);
+					addShopImg(shop, imageHolder);
 				}
 				//2.更新商铺信息
 				shop.setLastEditTime(new Date());

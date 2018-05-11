@@ -1,13 +1,13 @@
 package com.imooc.myo2o.enums;
 
-public enum ProductCategoryStateEnum {
-	SUCCESS(1, "操作成功"), INNER_ERROR(-1001, "操作失败"), EMPTY_LIST(-1002, "添加数少于1");
+public enum HeadLineStateEnum {
+	SUCCESS(0, "创建成功"), INNER_ERROR(-1001, "操作失败"), EMPTY(-1002, "头条信息为空");
 
 	private int state;
 
 	private String stateInfo;
 
-	private ProductCategoryStateEnum(int state, String stateInfo) {
+	private HeadLineStateEnum(int state, String stateInfo) {
 		this.state = state;
 		this.stateInfo = stateInfo;
 	}
@@ -20,8 +20,8 @@ public enum ProductCategoryStateEnum {
 		return stateInfo;
 	}
 
-	public static ProductCategoryStateEnum stateOf(int index) {
-		for (ProductCategoryStateEnum state : values()) {
+	public static HeadLineStateEnum stateOf(int index) {
+		for (HeadLineStateEnum state : values()) {
 			if (state.getState() == index) {
 				return state;
 			}

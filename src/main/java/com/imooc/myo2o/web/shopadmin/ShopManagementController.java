@@ -18,6 +18,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.imooc.myo2o.dto.ImageHolder;
 import com.imooc.myo2o.dto.ShopExecution;
 import com.imooc.myo2o.entity.Area;
 import com.imooc.myo2o.entity.Shop;
@@ -121,6 +122,7 @@ public class ShopManagementController {
 		if (shop != null & shopImg != null) {
 			//这个店主的信息以后通过session可以获取到,现在先硬编码一下,
 			//注意硬编码也不要乱写,这个OwnerId是一个外键,和person_info表关联的.
+			request.getSession().setAttribute("ownerId", 9L);
 			Long ownerId = (Long) request.getSession().getAttribute("ownerId");
 			shop.setOwnerId(ownerId);
 			//			//这里需要一个CommonsMultipartFile转换为File的方法.
@@ -143,7 +145,9 @@ public class ShopManagementController {
 			ShopExecution se;
 			try {
 				//这个addShop()方法传入的后两个参数之所以不合并成传入一个CommonsMultipartFile类型,是因为在做测试的时候CommonsMultpartFile类型很难弄出来.权衡利弊还是多传入一个参数比较好.
-				se = shopService.addShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
+
+				ImageHolder imageHolder = new ImageHolder(shopImg.getInputStream(), shopImg.getOriginalFilename());
+				se = shopService.addShop(shop, imageHolder);
 				if (se.getState() == ShopStateEnums.CHECK.getState()) {
 					modelMap.put("success", true);
 					//一个用户可以拥有多个商铺,所以要保存一个改用户可操作商铺的列表到session中.
@@ -215,9 +219,10 @@ public class ShopManagementController {
 			ShopExecution se;
 			try {
 				if (shop.getShopImg() == null) {
-					se = shopService.modifyShop(shop, null, null);
+					se = shopService.modifyShop(shop, null);
 				} else {
-					se = shopService.modifyShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
+					ImageHolder imageHolder = new ImageHolder(shopImg.getInputStream(), shopImg.getOriginalFilename());
+					se = shopService.modifyShop(shop, imageHolder);
 				}
 				if (se.getState() == ShopStateEnums.SUCCESS.getState()) {
 					modelMap.put("success", true);

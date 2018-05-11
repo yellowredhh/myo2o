@@ -28,22 +28,30 @@ public class ProductCategoryManagementController {
 	@Autowired
 	ProductCategoryService productCategoryService;
 
+	
 	@RequestMapping(value = "/getproductcategorylist", method = RequestMethod.GET)
 	@ResponseBody
-	public Result<List<ProductCategory>> getProductCategoryList(HttpServletRequest request) {
+	public Map<String, Object> getProductCategoryList(HttpServletRequest request) {
 		//To be removed
 		//		Shop shop = new Shop();
 		//		shop.setShopId(20L);
 		//		request.getSession().setAttribute("currentShop", shop);
-
+		Map<String, Object> modelMap = new HashMap<String, Object>();
 		Shop currentShop = (Shop) request.getSession().getAttribute("currentShop");
-		List<ProductCategory> list = null;
+		List<ProductCategory> productCategoryList = null;
 		if (currentShop != null && currentShop.getShopId() > 0) {
-			list = productCategoryService.getProductCategoryList(currentShop.getShopId());
-			return new Result<List<ProductCategory>>(true, list);
+			productCategoryList = productCategoryService.getProductCategoryList(currentShop.getShopId());
+			//return new Result<List<ProductCategory>>(true, productCategoryList);
+			//如果你要用Result这个类来包装结果,记得在前端页面获取后台返回结果的时候也要改名称.(在Result这个类中是用data属性表示数据)
+			modelMap.put("success", true);
+			modelMap.put("productCategoryList", productCategoryList);
+			return modelMap;
 		} else {
 			ProductCategoryStateEnum ps = ProductCategoryStateEnum.INNER_ERROR;
-			return new Result<List<ProductCategory>>(false, ps.getState(), ps.getStateInfo());
+			//return new Result<List<ProductCategory>>(false, ps.getState(), ps.getStateInfo());
+			modelMap.put("success", false);
+			modelMap.put("errMsg", ps.getStateInfo());
+			return modelMap;
 		}
 	}
 
