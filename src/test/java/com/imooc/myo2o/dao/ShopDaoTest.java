@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.imooc.myo2o.BaseTest;
 import com.imooc.myo2o.entity.Area;
 import com.imooc.myo2o.entity.Shop;
+import com.imooc.myo2o.entity.ShopCategory;
 
 public class ShopDaoTest extends BaseTest {
 	@Autowired
@@ -17,10 +18,18 @@ public class ShopDaoTest extends BaseTest {
 
 	@Test
 	public void queryShopListAndCountTest() {
+		//需求:查询某一个一级店铺类别下面的所有的店铺;两种实现方式
+		//第一种方式,对shop对象的shopCategory属性的parentId设置值.(由于我的dao层代码没有实现shopCategory的parentid来实现,所以需要更改后台dao查询代码来实现)
+		ShopCategory shopCategory = new ShopCategory();
+		//一级店铺id为10
+		shopCategory.setParentId(10L);
 		Shop shopCondition = new Shop();
-		Area area = new Area();
-		area.setAreaId(3L);
-		shopCondition.setArea(area);
+		shopCondition.setShopCategory(shopCategory);
+
+		//第二种方式:可以直接对shop对象设置一级店铺.
+		ShopCategory parentCategory = new ShopCategory();
+		parentCategory.setShopCategoryId(10L);
+		shopCondition.setParentCategory(parentCategory);
 		List<Shop> shopList = shopdao.queryShopList(shopCondition, 0, 3);
 		int count = shopdao.queryShopCount(shopCondition);
 		System.out.println(shopList.size());

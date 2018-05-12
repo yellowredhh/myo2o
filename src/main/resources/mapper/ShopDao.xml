@@ -62,7 +62,7 @@
 		</collection>
 	</resultMap>
 
-	<!-- 这个查询要传入三个参数,所以没有parameterType元素,用户可以根据传入的参数做高级查询,分页查询 -->
+	<!-- 这个查询要传入多个参数,所以没有parameterType元素,mybaits会根据查询时传入的对象类型自动解析参数,用户可以根据传入的参数做高级查询,分页查询 -->
 	<select id="queryShopList" resultMap="shopMap"
 		parameterType="com.imooc.myo2o.entity.Shop">
 		SELECT

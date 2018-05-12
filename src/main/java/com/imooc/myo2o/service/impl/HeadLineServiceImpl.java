@@ -20,13 +20,12 @@ import com.imooc.myo2o.entity.HeadLine;
 import com.imooc.myo2o.enums.HeadLineStateEnum;
 import com.imooc.myo2o.service.HeadLineService;
 import com.imooc.myo2o.util.ImageUtils;
-import com.imooc.myo2o.util.PathUtil;
 
 @Service
 public class HeadLineServiceImpl implements HeadLineService {
-	@Autowired
+//	@Autowired
 	private JedisUtil.Strings jedisStrings;
-	@Autowired
+//	@Autowired
 	private JedisUtil.Keys jedisKeys;
 	@Autowired
 	private HeadLineDao headLineDao;
@@ -34,22 +33,24 @@ public class HeadLineServiceImpl implements HeadLineService {
 
 	@Override
 	public List<HeadLine> getHeadLineList(HeadLine headLineCondition) throws IOException {
-		List<HeadLine> headLineList = null;
-		ObjectMapper mapper = new ObjectMapper();
-		String key = HLLISTKEY;
-		if (headLineCondition.getEnableStatus() != null) {
-			key = key + "_" + headLineCondition.getEnableStatus();
-		}
-		if (!jedisKeys.exists(key)) {
-			headLineList = headLineDao.queryHeadLine(headLineCondition);
-			String jsonString = mapper.writeValueAsString(headLineList);
-			jedisStrings.set(key, jsonString);
-		} else {
-			String jsonString = jedisStrings.get(key);
-			JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, HeadLine.class);
-			headLineList = mapper.readValue(jsonString, javaType);
-		}
-		return headLineList;
+		/*	List<HeadLine> headLineList = null;
+			ObjectMapper mapper = new ObjectMapper();
+			String key = HLLISTKEY;
+			if (headLineCondition.getEnableStatus() != null) {
+				key = key + "_" + headLineCondition.getEnableStatus();
+			}
+			if (!jedisKeys.exists(key)) {
+				headLineList = headLineDao.queryHeadLine(headLineCondition);
+				String jsonString = mapper.writeValueAsString(headLineList);
+				jedisStrings.set(key, jsonString);
+			} else {
+				String jsonString = jedisStrings.get(key);
+				JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, HeadLine.class);
+				headLineList = mapper.readValue(jsonString, javaType);
+			}
+			return headLineList;
+			*/
+		return headLineDao.queryHeadLine(headLineCondition);
 	}
 
 	@Override

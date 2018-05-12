@@ -32,7 +32,7 @@ public class ShopServiceImpl implements ShopService {
 	 * @see com.imooc.myo2o.service.ShopService#addShop(com.imooc.myo2o.entity.Shop, java.io.File)
 	 * @return 	ShopExecution是service层的处理结果,里面包含了处理状态和shop等信息
 	 */
-	public ShopExecution addShop(Shop shop,  ImageHolder imageHolder) {
+	public ShopExecution addShop(Shop shop, ImageHolder imageHolder) {
 		if (shop == null) {
 			//throw new ShopExecutionException(ShopStateEnums.NULL_SHOP_INFO.getStateInfo());
 			return new ShopExecution(ShopStateEnums.NULL_SHOP_INFO);
@@ -127,8 +127,11 @@ public class ShopServiceImpl implements ShopService {
 
 	@Override
 	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize) {
+		//行页转换
 		int rowIndex = PageCalculator.calculateRowIndex(pageIndex, pageSize);
+		//分页查询出符合要求的店铺列表(返回结果根据店铺权重由大到小排序)
 		List<Shop> shopList = shopDao.queryShopList(shopCondition, rowIndex, pageSize);
+		//在同样的条件下查询店铺总数
 		int shopCount = shopDao.queryShopCount(shopCondition);
 		ShopExecution se = new ShopExecution();
 		if (shopList != null) {

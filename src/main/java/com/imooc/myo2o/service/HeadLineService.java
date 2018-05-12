@@ -11,7 +11,7 @@ import com.imooc.myo2o.entity.HeadLine;
 public interface HeadLineService {
 
 	/**
-	 * 
+	 * 获取头条列表
 	 * @param headLineCondition
 	 * @return
 	 * @throws IOException

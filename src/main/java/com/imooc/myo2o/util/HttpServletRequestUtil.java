@@ -2,6 +2,11 @@ package com.imooc.myo2o.util;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 尝试从http请求中获取对应字符串的数据
+ * @author hh
+ *
+ */
 public class HttpServletRequestUtil {
 	public static int getInt(HttpServletRequest request, String name) {
 		try {
