@@ -37,7 +37,7 @@ public class MainPageController {
 		List<ShopCategory> shopCategoryList = new ArrayList<ShopCategory>();
 		try {
 			//获取一级店铺列表(也就是parentId为空的ShopCategory)
-			shopCategoryList = shopCategoryService.getShopCategoryList(null);
+			shopCategoryList = shopCategoryService.getFirstLevelShopCategoryList();
 			modelMap.put("shopCategoryList", shopCategoryList);
 		} catch (Exception e) {
 			e.printStackTrace();

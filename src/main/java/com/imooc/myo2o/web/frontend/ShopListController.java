@@ -46,9 +46,7 @@ public class ShopListController {
 		if (parentId != -1) {
 			//如果parentId存在,则取出一级店铺下面的二级店铺列表
 			try {
-				ShopCategory shopCategory = new ShopCategory();
-				shopCategory.setParentId(parentId);
-				shopCategoryList = shopCategoryService.getShopCategoryList(shopCategory);
+				shopCategoryList = shopCategoryService.getShopCategoryList(parentId);
 			} catch (Exception e) {
 				modelMap.put("success", false);
 				modelMap.put("errMsg", e.toString());
@@ -56,7 +54,7 @@ public class ShopListController {
 		} else {
 			//如果不存在parentId,则取出所有一级shopCategory(这个用来实现用户在首页点击"全部商店")
 			try {
-				shopCategoryList = shopCategoryService.getShopCategoryList(null);
+				shopCategoryList = shopCategoryService.getFirstLevelShopCategoryList();
 			} catch (Exception e) {
 				modelMap.put("success", false);
 				modelMap.put("errMsg", e.toString());

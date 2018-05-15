@@ -37,4 +37,13 @@ public interface ShopDao {
 	public int updateShop(Shop shop);
 
 	public int deleteShop(Shop shop);
+
+	/**
+	 * 通过employee id 查询店铺
+	 * 
+	 * @param employeeId
+	 * @return List<shop>
+	 */
+	List<Shop> queryByEmployeeId(long employeeId);
+
 }

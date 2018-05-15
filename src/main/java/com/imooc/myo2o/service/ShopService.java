@@ -6,7 +6,16 @@ import com.imooc.myo2o.entity.Shop;
 
 public interface ShopService {
 
-	
+	/**
+	 * 查询该用户下面的店铺信息
+	 * 
+	 * @param long
+	 *            employyeeId
+	 * @return List<Shop>
+	 * @throws Exception
+	 */
+	ShopExecution getByEmployeeId(long employeeId) throws RuntimeException;
+
 	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize);
 
 	/*
@@ -22,5 +31,5 @@ public interface ShopService {
 	/*
 	 * 增加商铺
 	 */
-	public ShopExecution addShop(Shop shop,  ImageHolder imageHolder);
+	public ShopExecution addShop(Shop shop, ImageHolder imageHolder);
 }

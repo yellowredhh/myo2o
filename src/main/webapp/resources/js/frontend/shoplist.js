@@ -4,7 +4,7 @@ $(function() {
 	// 定义允许返回的最大条数,如果当前所有返回的条数大于这个值,则禁止继续访问后台(这里只是设定一个默认值,实际查询过程中会根据查询结果做动态调整)
 	var maxItems = 999;
 	// 一页显示的最大数目
-	var pageSize = 2;
+	var pageSize = 3;
 	// 获取指定条件下的shop的url
 	var listUrl = '/myo2o/frontend/listshops';
 	// 获取商品的一级店铺列表(如果url中没有parentId则或者二级店铺列表,以及区域信息列表的url
@@ -99,9 +99,13 @@ $(function() {
 				var total = $('.list-div .card').length;
 				if (total >= maxItems) {// 如果当前条目超过了之前查询所获取到的结果条数,则停止无极加载
 					// 加载完毕，则注销无限加载事件，以防不必要的加载
-					$.detachInfiniteScroll($('.infinite-scroll'));
+					// $.detachInfiniteScroll($('.infinite-scroll'));
 					// 删除加载提示符(删除html页面中class元素为infinite-scroll-preloader的控件)
-					$('.infinite-scroll-preloader').remove();
+					// $('.infinite-scroll-preloader').remove();
+
+					$('.infinite-scroll-preloader').hide();// 修复bug,不能删除这个无极滚动提示符.加载完成后应该隐藏无极滚动提示符
+				} else {
+					$('.infinite-scroll-preloader').show();
 				}
 				// 否则页码加1
 				pageNum += 1;
@@ -169,8 +173,8 @@ $(function() {
 
 			});
 
-	// 需要查询的店铺名字发生变化后,重置页码,重新按照新的名字去后台查询
-	$('#search').on('input', function(e) {
+	// 需要查询的店铺名字发生变化后,重置页码,重新按照新的名字去后台查询,之前使用的input事件,但是反应太快了,导致原先的查询结果还没来及被empty,就加在了新结果,所以有时候会看到重复的加载结果
+	$('#search').on('change', function(e) {
 		// 将当前标签的value赋值给shopName作为模糊名查询条件
 		shopName = e.target.value;
 		// 清空原先的查询结果

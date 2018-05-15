@@ -70,9 +70,9 @@ public class ShopManagementController {
 	@ResponseBody
 	private Map<String, Object> getShopInitInfo() {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
-		List<Area> areaList = areaService.getAreaList();
-		List<ShopCategory> shopCategoryList = shopCategoryService.getShopCategoryList(new ShopCategory());
 		try {
+			List<ShopCategory> shopCategoryList = shopCategoryService.getShopCategoryList(null);
+			List<Area> areaList = areaService.getAreaList();
 			modelMap.put("shopCategoryList", shopCategoryList);
 			modelMap.put("areaList", areaList);
 			modelMap.put("success", true);

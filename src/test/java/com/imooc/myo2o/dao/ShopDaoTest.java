@@ -15,7 +15,11 @@ import com.imooc.myo2o.entity.ShopCategory;
 public class ShopDaoTest extends BaseTest {
 	@Autowired
 	private ShopDao shopdao;
-
+	
+	/**
+	 * 查询shop不能使用shop的shopCategory的parentId来查询,因为dao层没有实现这种方式.
+	 * 但是查询shopCategory是可以使用shopCategory的parentId来出现的,dao层实现了这种方式
+	 */
 	@Test
 	public void queryShopListAndCountTest() {
 		//需求:查询某一个一级店铺类别下面的所有的店铺;两种实现方式

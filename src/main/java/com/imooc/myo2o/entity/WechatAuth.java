@@ -1,14 +1,19 @@
 package com.imooc.myo2o.entity;
 
 import java.util.Date;
+
 /*
  * 微信账号
  */
 public class WechatAuth {
+	//主键
 	private Long wechatAuthId;
+	//外键:这个和personinfo中的userId关联,表示这个微信账号属于哪一个用户
 	private Long userId;
+	//微信获取用户信息的凭证,对于某一个微信公众号而言具有唯一性
 	private String openId;
 	private Date createTime;
+	//用户信息
 	private PersonInfo personInfo;
 
 	public Long getWechatAuthId() {

@@ -26,6 +26,14 @@ public class ShopServiceImpl implements ShopService {
 	private ShopDao shopDao;
 
 	@Override
+	public ShopExecution getByEmployeeId(long employeeId) throws RuntimeException {
+		List<Shop> shopList = shopDao.queryByEmployeeId(employeeId);
+		ShopExecution se = new ShopExecution();
+		se.setShopList(shopList);
+		return se;
+	}
+
+	@Override
 	@Transactional
 	/*这个方法完成了添加店铺并给店铺添加缩略图的功能,先添加店铺信息,然后添加缩略图的相对路径属性,然后更新店铺信息(把添加的缩略图路径属性刷新进去)
 	 * (non-Javadoc)

@@ -20,7 +20,7 @@ public class PathUtil {
 		}
 		return basePath.replace("/", separator);
 	}
-	
+
 	/*
 	 * 获取商铺图片的相对路径(这个路径和basePath一起组成了全路径)
 	 */
@@ -29,4 +29,24 @@ public class PathUtil {
 		String shopImagePath = "/upload/images/item/shop/" + shopId + "/";
 		return shopImagePath.replace("/", separator);
 	}
+
+	public static String getHeadLineImagePath() {
+		String headLineImagePath = "/upload/images/item/headtitle/";
+		headLineImagePath = headLineImagePath.replace("/", separator);
+		return headLineImagePath;
+	}
+
+	public static String getShopCategoryImagePath() {
+		String shopCategoryImagePath = "/upload/images/item/shopcategory/";
+		shopCategoryImagePath = shopCategoryImagePath.replace("/", separator);
+		return shopCategoryImagePath;
+	}
+
+	public static String getPersonInfoImagePath() {
+		String personInfoImagePath = "/upload/images/item/personinfo/";
+		personInfoImagePath = personInfoImagePath.replace("/", separator);
+		return personInfoImagePath;
+	}
+	
+
 }

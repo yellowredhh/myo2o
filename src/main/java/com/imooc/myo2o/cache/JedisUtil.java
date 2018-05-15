@@ -26,6 +26,7 @@ public class JedisUtil {
 	/** 对存储结构为HashMap类型的操作 */
 	public Hash HASH;
 
+	/** redis连接池对象 */
 	private JedisPool jedisPool;
 
 	public JedisPool getJedisPool() {
@@ -98,8 +99,7 @@ public class JedisUtil {
 		 * @return 状态码
 		 * */
 		public String rename(String oldkey, String newkey) {
-			return rename(SafeEncoder.encode(oldkey),
-					SafeEncoder.encode(newkey));
+			return rename(SafeEncoder.encode(oldkey), SafeEncoder.encode(newkey));
 		}
 
 		/**
@@ -1084,8 +1084,7 @@ public class JedisUtil {
 		 * @return 状态码
 		 * */
 		public String lset(String key, int index, String value) {
-			return lset(SafeEncoder.encode(key), index,
-					SafeEncoder.encode(value));
+			return lset(SafeEncoder.encode(key), index, SafeEncoder.encode(value));
 		}
 
 		/**
@@ -1100,10 +1099,8 @@ public class JedisUtil {
 		 *            value 插入的内容
 		 * @return 记录总数
 		 * */
-		public long linsert(String key, LIST_POSITION where, String pivot,
-				String value) {
-			return linsert(SafeEncoder.encode(key), where,
-					SafeEncoder.encode(pivot), SafeEncoder.encode(value));
+		public long linsert(String key, LIST_POSITION where, String pivot, String value) {
+			return linsert(SafeEncoder.encode(key), where, SafeEncoder.encode(pivot), SafeEncoder.encode(value));
 		}
 
 		/**
@@ -1117,8 +1114,7 @@ public class JedisUtil {
 		 * @param byte[] value 插入的内容
 		 * @return 记录总数
 		 * */
-		public long linsert(byte[] key, LIST_POSITION where, byte[] pivot,
-				byte[] value) {
+		public long linsert(byte[] key, LIST_POSITION where, byte[] pivot, byte[] value) {
 			Jedis jedis = getJedis();
 			long count = jedis.linsert(key, where, pivot, value);
 			jedis.close();

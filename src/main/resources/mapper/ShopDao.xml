@@ -233,4 +233,34 @@
 		delete from tb_shop where
 		shop_id = #{shopId}
 	</delete>
+
+	<!-- 目的：为dao接口方法提供sql语句配置 -->
+	<select id="queryByEmployeeId" resultMap="shopMap"
+		parameterType="Long">
+		<!-- 具体的sql -->
+		SELECT
+		s.shop_id,
+		s.shop_name,
+		s.shop_desc,
+		s.phone,
+		s.shop_img,
+		s.longitude,
+		s.latitude,
+		s.priority,
+		s.create_time,
+		s.last_edit_time,
+		s.enable_status,
+		s.advice,
+		p.employee_id,
+		p.name
+		FROM
+		tb_shop s
+		LEFT JOIN
+		tb_shop_auth_map
+		p ON s.shop_id =
+		p.shop_id
+		WHERE
+		p.employee_id =
+		#{employeeId}
+	</select>
 </mapper>
