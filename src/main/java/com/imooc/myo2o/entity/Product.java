@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Product implements Serializable{
-	
+public class Product implements Serializable {
+
 	/**
 	 * 商品
 	 */
@@ -13,19 +13,23 @@ public class Product implements Serializable{
 	private Long productId;
 	private String productName;
 	private String productDesc;
-	private String imgAddr;// 简略图
+	// 简略图
+	private String imgAddr;
 	private String normalPrice;
 	private String promotionPrice;
 	private Integer priority;
 	private Date createTime;
 	private Date lastEditTime;
-	
+
 	//0:表示下架,1:表示在前端展示系统展示
 	private Integer enableStatus;
+	//商品积分
 	private Integer point;
-
+	//商品详情描述图片地址列表
 	private List<ProductImg> productImgList;
+	//商品分类
 	private ProductCategory productCategory;
+	//商品所属店铺
 	private Shop shop;
 
 	public Long getProductId() {

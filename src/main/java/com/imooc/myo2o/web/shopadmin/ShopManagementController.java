@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imooc.myo2o.dto.ImageHolder;
 import com.imooc.myo2o.dto.ShopExecution;
 import com.imooc.myo2o.entity.Area;
+import com.imooc.myo2o.entity.PersonInfo;
 import com.imooc.myo2o.entity.Shop;
 import com.imooc.myo2o.entity.ShopCategory;
 import com.imooc.myo2o.enums.ShopStateEnums;
@@ -150,7 +151,7 @@ public class ShopManagementController {
 				se = shopService.addShop(shop, imageHolder);
 				if (se.getState() == ShopStateEnums.CHECK.getState()) {
 					modelMap.put("success", true);
-					//一个用户可以拥有多个商铺,所以要保存一个改用户可操作商铺的列表到session中.
+					//一个用户可以拥有多个商铺,可以从session中拿到shopList(这个shopList是在shopManagementController的getShopList方法设置到session中去得).
 					List<Shop> shopList = (List<Shop>) request.getSession().getAttribute("shopList");
 					if (shopList == null || shopList.size() == 0) {
 						shopList = new ArrayList<Shop>();
@@ -275,6 +276,12 @@ public class ShopManagementController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		//先硬编码一个数据到session中去.
 		request.getSession().setAttribute("areaId", 4L);
+		//硬编码微信相关的数据到session中去,避免每一次调试都要去访问微信url
+		PersonInfo user = new PersonInfo();
+		user.setUserId(9L);
+		user.setName("from_shopmanagementcontroller");
+		request.getSession().setAttribute("user", user);
+		user = (PersonInfo) request.getSession().getAttribute("user");
 		Long areaId = (Long) request.getSession().getAttribute("areaId");
 		try {
 			Shop shopCondition = new Shop();
@@ -282,6 +289,8 @@ public class ShopManagementController {
 			area.setAreaId(areaId);
 			shopCondition.setArea(area);
 			ShopExecution se = shopService.getShopList(shopCondition, 0, 100);
+			//列出店铺列表成功之后,就将当前用户可操作的店铺列表放到session中去,作为权限验证依据,即该账号只能操作自己拥有的店铺
+			request.getSession().setAttribute("shopList", se.getShopList());
 			modelMap.put("shopList", se.getShopList());
 			modelMap.put("success", true);
 			modelMap.put("areaId", areaId);

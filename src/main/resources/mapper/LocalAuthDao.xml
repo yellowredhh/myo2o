@@ -2,6 +2,7 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- localAuth和personInfo是一一对应的关系 -->
 <mapper namespace="com.imooc.myo2o.dao.LocalAuthDao">
 	<resultMap id="localAuthResultMap" type="com.imooc.myo2o.entity.LocalAuth">
 		<id column="local_auth_id" property="localAuthId" />
@@ -27,6 +28,7 @@
 			<result column="enable_status" property="enableStatus" />
 		</association>
 	</resultMap>
+	
 	<select id="queryLocalByUserNameAndPwd" resultMap="localAuthResultMap"
 		parameterType="String">
 		SELECT
@@ -62,6 +64,7 @@
 		AND
 		l.password = #{password}
 	</select>
+	
 	<select id="queryLocalByUserId" resultMap="localAuthResultMap"
 		parameterType="long">
 		SELECT
@@ -95,6 +98,8 @@
 		l.user_id =
 		#{userId}
 	</select>
+	
+	<!-- username具有唯一性 -->
 	<insert id="insertLocalAuth" parameterType="com.imooc.myo2o.entity.LocalAuth"
 		useGeneratedKeys="true" keyProperty="localAuthId" keyColumn="local_auth_id">
 		INSERT
@@ -103,6 +108,7 @@
 		VALUES
 		(#{userName},#{password},#{userId},#{createTime},#{lastEditTime})
 	</insert>
+	
 	<update id="updateLocalAuth">
 		update tb_local_auth
 		<set>

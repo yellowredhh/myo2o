@@ -2,15 +2,25 @@ package com.imooc.myo2o.entity;
 
 import java.util.Date;
 
+/**
+ * 顾客消费商品的映射
+ * @author hh
+ *
+ */
 public class UserProductMap {
+	//主键id(作为primary key)
 	private Long userProductId;
+	//用户id,商品id,店铺id(数据库中分别作为key)
 	private Long userId;
 	private Long productId;
 	private Long shopId;
+	//用户姓名,产品名称,创建时间
 	private String userName;
 	private String productName;
 	private Date createTime;
+	//消费商品所获得的积分
 	private Integer point;
+	//三个实体类(外键关联)
 	private PersonInfo user;
 	private Product product;
 	private Shop shop;

@@ -1,5 +1,6 @@
 $(function() {
 	var productId = getQueryString('productId');
+	// 获取商品信息的url
 	var productUrl = '/myo2o/frontend/listproductdetailpageinfo?productId='
 			+ productId;
 
@@ -8,13 +9,19 @@ $(function() {
 					productUrl,
 					function(data) {
 						if (data.success) {
+							// 获取商品信息
 							var product = data.product;
+							// 给商品信息相关html控件赋值
 							$('#product-img').attr('src', product.imgAddr);
 							$('#product-time').text(
 									new Date(product.lastEditTime)
 											.Format("yyyy-MM-dd"));
 							$('#product-name').text(product.productName);
 							$('#product-desc').text(product.productDesc);
+							if (product.point != undefined) {
+								$('#product-point').text(
+										'购买可以获得' + product.point + '积分');
+							}
 							var imgListHtml = '';
 							product.productImgList.map(function(item, index) {
 								imgListHtml += '<div> <img src="'

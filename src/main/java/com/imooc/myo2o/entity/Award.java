@@ -2,17 +2,26 @@ package com.imooc.myo2o.entity;
 
 import java.util.Date;
 
+/**
+ * 奖品实体类
+ * @author hh
+ *
+ */
 public class Award {
+	//主键id,奖品名称,奖品描述
 	private Long awardId;
 	private String awardName;
 	private String awardDesc;
+	//奖品图片,兑换奖品需要的积分,权重,创建时间
 	private String awardImg;
 	private Integer point;
 	private Integer priority;
 	private Date createTime;
+	//奖品失效时间,最后一次更新时间,可用状态(1表示可用,0表示不可用)
 	private Date expireTime;
 	private Date lastEditTime;
 	private Integer enableStatus;
+	//奖品属于哪一个店铺
 	private Long shopId;
 
 	public Long getAwardId() {

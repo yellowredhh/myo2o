@@ -2,14 +2,24 @@ package com.imooc.myo2o.entity;
 
 import java.util.Date;
 
+/**
+ * 顾客在某一个店铺消费的总积分的映射
+ * @author hh
+ *
+ */
 public class UserShopMap {
+	//主键id
 	private Long userShopId;
+	//key(两者一起组成了唯一key约束)
 	private Long userId;
 	private Long shopId;
+
 	private String userName;
 	private String shopName;
 	private Date createTime;
+	//总积分
 	private Integer point;
+	//三个实体类
 	private PersonInfo user;
 	private Product product;
 	private Shop shop;

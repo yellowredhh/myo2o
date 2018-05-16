@@ -8,7 +8,7 @@ $(function() {
 			success : function(data) {
 				if (data.success) {
 					handleList(data.shopList);
-					handleUser(data.areaId);
+					handleUser(data.user);
 				}
 			}
 		});

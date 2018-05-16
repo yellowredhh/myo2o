@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>商品编辑</title>
+<title>注册</title>
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 <link rel="shortcut icon" href="/favicon.ico">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,11 +12,10 @@
 	href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
 <link rel="stylesheet"
 	href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-<link rel="stylesheet" href="../resources/css/shop/productmanage.css">
 </head>
 <body>
 	<header class="bar bar-nav">
-		<h1 class="title">商品编辑</h1>
+		<h1 class="title">注册</h1>
 	</header>
 	<div class="content">
 		<div class="list-block">
@@ -27,9 +26,8 @@
 							<i class="icon icon-form-name"></i>
 						</div>
 						<div class="item-inner">
-							<div class="item-title label">商品名称</div>
 							<div class="item-input">
-								<input type="text" id="product-name" placeholder="商品名称">
+								<input type="text" placeholder="用户名" id="userName">
 							</div>
 						</div>
 					</div>
@@ -40,10 +38,8 @@
 							<i class="icon icon-form-email"></i>
 						</div>
 						<div class="item-inner">
-							<div class="item-title label">目录</div>
 							<div class="item-input">
-								<select id="category">
-								</select>
+								<input type="password" placeholder="密码" id="password">
 							</div>
 						</div>
 					</div>
@@ -54,9 +50,8 @@
 							<i class="icon icon-form-email"></i>
 						</div>
 						<div class="item-inner">
-							<div class="item-title label">优先级</div>
 							<div class="item-input">
-								<input type="number" id="priority" placeholder="数字越大越排前面">
+								<input type="password" placeholder="确认密码">
 							</div>
 						</div>
 					</div>
@@ -67,9 +62,8 @@
 							<i class="icon icon-form-email"></i>
 						</div>
 						<div class="item-inner">
-							<div class="item-title label">积分</div>
 							<div class="item-input">
-								<input type="number" id="point" placeholder="商品积分">
+								<input type="tel" placeholder="手机号码" id="phone">
 							</div>
 						</div>
 					</div>
@@ -80,9 +74,8 @@
 							<i class="icon icon-form-email"></i>
 						</div>
 						<div class="item-inner">
-							<div class="item-title label">原价</div>
 							<div class="item-input">
-								<input type="number" id="normal-price" placeholder="可选">
+								<input type="email" placeholder="邮箱" id="email">
 							</div>
 						</div>
 					</div>
@@ -93,9 +86,8 @@
 							<i class="icon icon-form-email"></i>
 						</div>
 						<div class="item-inner">
-							<div class="item-title label">现价</div>
 							<div class="item-input">
-								<input type="number" id="promotion-price" placeholder="可选">
+								<input type="text" placeholder="用户昵称" id="name">
 							</div>
 						</div>
 					</div>
@@ -106,37 +98,9 @@
 							<i class="icon icon-form-email"></i>
 						</div>
 						<div class="item-inner">
-							<div class="item-title label">缩略图</div>
+							<div class="item-title label">头像</div>
 							<div class="item-input">
 								<input type="file" id="small-img">
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="item-content">
-						<div class="item-media">
-							<i class="icon icon-form-email"></i>
-						</div>
-						<div class="item-inner detail-img-div">
-							<div class="item-title label">详情图片</div>
-							<div class="item-input" id="detail-img">
-								<input type="file" class="detail-img">
-								<!-- <input type="file" class="detail-img" id="detail-img-1">
-                                <input type="file" class="detail-img" id="detail-img-2"> -->
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="item-content">
-						<div class="item-media">
-							<i class="icon icon-form-email"></i>
-						</div>
-						<div class="item-inner">
-							<div class="item-title label">商品描述</div>
-							<div class="item-input">
-								<textarea id="product-desc" placeholder="商品描述"></textarea>
 							</div>
 						</div>
 					</div>
@@ -157,14 +121,13 @@
 						</div>
 					</div>
 				</li>
-
 			</ul>
 		</div>
 		<div class="content-block">
 			<div class="row">
 				<div class="col-50">
-					<a href="/myo2o/shopadmin/productmanage"
-						class="button button-big button-fill button-danger" id="back">返回商品管理</a>
+					<a href="#" class="button button-big button-fill button-danger"
+						id="back">返回登录</a>
 				</div>
 				<div class="col-50">
 					<a href="#" class="button button-big button-fill" id="submit">提交</a>
@@ -181,9 +144,9 @@
 		src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 	<script type='text/javascript'
 		src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
-	<script type='text/javascript' src='../resources/js/common/common.js'
-		charset='utf-8'></script>
 	<script type='text/javascript'
-		src='../resources/js/shop/productoperation.js' charset='utf-8'></script>
+		src='../resources/js/common/commonutil.js' charset='utf-8'></script>
+	<script type='text/javascript' src='../resources/js/shop/register.js'
+		charset='utf-8'></script>
 </body>
 </html>
